@@ -1,6 +1,6 @@
 """
 
-    calculator program
+    Calculator program
 
 """
 
@@ -46,7 +46,7 @@ class Calculator:
 
             self.master = master
 
-            self.master.geometry("350x450+100+100")
+            self.master.geometry("350x450+500+100")
             self.master.title("Calculator")
 
             text_font = tk.font.Font(
@@ -73,7 +73,32 @@ class Calculator:
             super().__init__(master)
             self.master = master
 
-        def make_button(self, button: tk.Button) -> None: ...
+        def button_init(self) -> None:
+            _buttons = [
+                "7", "8", "9", "÷",
+                "6", "5", "4", "×",
+                "1", "2", "3", "-",
+                "=", "0", "00", "+",
+                "AC", ".", "√", "^"
+            ]
+            row, column = 0, 1
+
+            for i, _button_text in enumerate(_buttons):
+                _button = tk.Button(self.master, text=_button_text, width=10, height=3)
+                _button.grid(column=column, row=row, columnspan=2, sticky="ew")
+                _button.brid("<button-1>", self.callback)
+
+        def callback(self, event: any) -> None:
+            _input_txt = event.widget["text"]
+
+            print(
+                f"button pressed : + {(event.widget["text"])}"
+            )
+
+            if _input_txt == "=":
+                self.calculate()
+            else:
+                self.insert(_input_txt)
 
 
 def main():
