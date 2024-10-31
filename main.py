@@ -1,3 +1,4 @@
+
 """
 
     Calculator program
@@ -96,9 +97,10 @@ class Calculator:
             )
 
             if _input_txt == "=":
-                self.calculate()
+                ...
+
             else:
-                self.insert(_input_txt)
+                ...
 
 
 def main():
