@@ -1,106 +1,123 @@
+"""
+
+    calculator program
 
 """
 
-    Calculator program
 
-"""
-
-# import tkinter
 import tkinter as tk
-from tkinter import ttk
+import tkinter.ttk as ttk
 from tkinter.font import Font
 
-# import math
 import math
 
 
-# textbox input restriction
-def input_restriction(string: any) -> None:
-    if len(string) == 0:
-        return True
+def __decorator__(func) -> None:
 
-    types: tuple[any, any] = (int, float)
-    for type_ in types:
-        try:
-            type_(string[-1])
+    """
+    :param func:
+    :return:
+    """
+
+    def wrapper(string: any):
+
+        """
+        :param string:
+        :return:
+        """
+
+        """Text box input restrictions"""
+
+        if len(string) == 0:
             return True
 
-        except ValueError:
-            continue
+        types: tuple[any, any] = (int, float)
+        for type_ in types:
+            try:
+                type_(string[-1])
+                return True
 
-    for _str in [
-        "+", "-", "×", "÷", "=",
-        ".", "(", ")", "^", "√"
-    ]:
-        if string[-1] == _str:
-            return True
+            except ValueError:
+                continue
 
-    return False
+        for _str in [
+            "+", "-", "×", "÷", "=",
+            ".", "(", ")", "^", "√"
+        ]:
+            if string[-1] == _str:
+                return True
+
+        return False
+
+    return wrapper
 
 
-class Calculator:
+@__decorator__
+def __input_rest__() -> bool:
 
-    # generate calculator window
-    class Window(tk.Frame):
-        def __init__(self, master: any) -> None:
-            super().__init__(master)
+    """
+    :param string:
+    :return:
+    """
 
-            self.master = master
+    return True
 
-            self.master.geometry("350x450+500+100")
-            self.master.title("Calculator")
 
-            text_font = tk.font.Font(
-                slant="italic", weight="normal",
-                underline=False, size=20
-            )
+class Window(tk.Frame):
+    def __init__(self, master: any) -> None:
 
-            validata = self.master.register(input_restriction)
-            self.text = tk.Entry(
-                self.master,
-                background="black", foreground="lime", insertbackground="lime",
-                font=text_font,
-                validate="key", validatecommand=(validata, "%P")
-            )
+        """
+        :param master:
+        """
 
-            self.master.columnconfigure(0, weight=1)
-            self.text.grid(
-                column=0, row=0, columnspan=2, sticky="ew"
-            )
+        """Generate the window"""
+        """Generate text box and set content"""
 
-    # generate calculator button
-    class Button(tk.Button):
-        def __init__(self, master: any) -> None:
-            super().__init__(master)
-            self.master = __master
+        tk.Frame.__init__(self, master)
 
-        def button_init(self) -> None:
-            for i in range(1, 10):
-                _num_button = tk.Button(self.__master, text=i, width=10, height=3)
-                _num_button.grid(row=3-(i-1)//3, column=(i-1)%3, columnspan=2, sticky="ew")
-                _num_button.bind("<Button-1>", self.callback)
+        self.master = master
 
-        def callback(self, event: any) -> None:
-            event.widget.config()
+        self.master.geometry("350x450+500+100")
+        self.master.title("Calculator")
 
-            _input_txt = event.widget["text"]
+        text_font = tk.font.Font(
+            slant="italic", weight="normal",
+            underline=False, size=20
+        )
 
-            print(
-                f"button pressed : + {(event.widget["text"])}"
-            )
+        validata = self.master.register(__input_rest__)
+        self.text = tk.Entry(
+            self.master,
+            background="black", foreground="lime", insertbackground="lime",
+            font=text_font,
+            validate="key", validatecommand=(validata, "%P")
+        )
 
-            if _input_txt == "=":
-                ...
+        self.master.columnconfigure(0, weight=1)
+        self.text.grid(
+            column=0, row=0, columnspan=2, sticky="ew"
+        )
 
-            else:
-                ...
+
+class Button(tk.Button):
+    def __init__(self, master: any) -> None:
+
+        """
+        :param master:
+        """
+
+        super().__init__(master)
+        self.master = __master
+
+    def __make_button__(self) -> None: ...
 
 
 def main():
     root = tk.Tk()
-    application = Calculator.Window(master=root)
-    application.mainloop()
+    App = Window(master=root)
+    App.mainloop()
 
 
 if __name__ == "__main__":
     main()
+
