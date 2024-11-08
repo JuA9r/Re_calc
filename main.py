@@ -28,11 +28,11 @@ def input_restriction(string: any) -> None:
         except ValueError:
             continue
 
-    for s in [
+    for _str in [
         "+", "-", "×", "÷", "=",
         ".", "(", ")", "^", "√"
     ]:
-        if string[-1] == s:
+        if string[-1] == _str:
             return True
 
     return False
@@ -72,24 +72,17 @@ class Calculator:
     class Button(tk.Button):
         def __init__(self, master: any) -> None:
             super().__init__(master)
-            self.master = master
+            self.master = __master
 
         def button_init(self) -> None:
-            _buttons = [
-                "7", "8", "9", "÷",
-                "6", "5", "4", "×",
-                "1", "2", "3", "-",
-                "=", "0", "00", "+",
-                "AC", ".", "√", "^"
-            ]
-            row, column = 0, 1
-
-            for i, _button_text in enumerate(_buttons):
-                _button = tk.Button(self.master, text=_button_text, width=10, height=3)
-                _button.grid(column=column, row=row, columnspan=2, sticky="ew")
-                _button.brid("<button-1>", self.callback)
+            for i in range(1, 10):
+                _num_button = tk.Button(self.__master, text=i, width=10, height=3)
+                _num_button.grid(row=3-(i-1)//3, column=(i-1)%3, columnspan=2, sticky="ew")
+                _num_button.bind("<Button-1>", self.callback)
 
         def callback(self, event: any) -> None:
+            event.widget.config()
+
             _input_txt = event.widget["text"]
 
             print(
