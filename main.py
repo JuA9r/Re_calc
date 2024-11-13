@@ -118,14 +118,15 @@ class Button(tk.Button):
             f"button clicked: {(event.widget["text"])}"
         )
 
-    class Display(tk.Frame):
-        def __init__(self, master: any) -> None:
 
-            tk.Frame.__init__(self, master)
-            self.master = master
+class Calculation(tk.Frame):
+    def __init__(self, master: any) -> None:
 
-        def input(self):
-            ...
+        tk.Frame.__init__(self, master)
+        self.master = master
+
+    def input(self):
+        ...
 
 
 def main():
