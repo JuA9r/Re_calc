@@ -1,7 +1,7 @@
 import random
 
 
-def __test_decorator__(func):
+def test_decorator(func):
     def wrapper(*args, **kwargs):
         print("Running")
         result = func(*args, **kwargs)
@@ -11,7 +11,7 @@ def __test_decorator__(func):
     return wrapper
 
 
-@__test_decorator__
+@test_decorator
 def __test__(a, b):
     return a + b
 
