@@ -1,6 +1,6 @@
 # make calculator
 ## __Execution environment__
-- Python -> 3.13
+- Python -> 3.12
 - tkinter -> 8.6
 
 ## __Overview__
@@ -19,7 +19,7 @@ _Basic functions_
 _main_
  
 - [x] Window generation
-- [ ] Button generation
+- [x] Button generation
 - [x] Text box input restrictions
 - [x] Numerical input
 - [x] Delete formula
@@ -27,6 +27,3 @@ _main_
 - [ ] Displaying calculation results
 - [ ] factorial calculation
 - [ ] power calculation
-- [ ] trigonometric function
-- [ ] logarithm function
-
