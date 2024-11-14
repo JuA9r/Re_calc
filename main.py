@@ -5,7 +5,6 @@
 """
 
 import tkinter as tk
-import tkinter.ttk as ttk
 from tkinter.font import Font
 
 import math
@@ -56,11 +55,11 @@ class Display(tk.Frame):
         """Generate text box and set content"""
         """Change text style"""
 
-        tk.Frame.__init__(self, master)
+        super().__init__(master)
 
         self.master = master
 
-        self.master.geometry("320x450+450+100")
+        self.master.geometry("320x465+450+100")
         self.master.title("Calculator")
 
         text_font = tk.font.Font(
@@ -81,6 +80,7 @@ class Display(tk.Frame):
             column=0, row=0, columnspan=4, sticky="ew"
         )
 
+        self._calc = Calculation(self.text)
         self._button = Button(self.master)
         self._button.make_button()
 
@@ -95,38 +95,58 @@ class Button(tk.Button):
 
         """generate calc button"""
 
-        # str button
-        _str_button = ["+", "-", "×", "÷"]
+        # operator button list
+        _ope_button = ["+", "-", "×", "÷"]
+        _ope_button2 = ["^", "√", "=", "AC"]
 
+        # str button list
+        _str_button = [".", "0", "00"]
+
+        # Generate buttons 1 to 9 with 3×3
         for i in range(1, 10):
             _num_button = tk.Button(self.master, text=i, width=10, height=5)
             _num_button.grid(row=3-(i-1)//3, column=(i-1)%3, sticky=tk.W)
             _num_button.bind("<Button-1>", self.click_button)
 
-        for i, j in enumerate(_str_button):
-            _str_btn = tk.Button(self.master, text=j, width=10, height=5)
-            _str_btn.grid(row=i+1, column=3)
-            _str_btn.bind("<Button-1>", self.click_button)
-            continue
+        # Generate buttons in a vertical column on the right edge
+        for i, j in enumerate(_ope_button):
+            _ope_button = tk.Button(self.master, text=j, width=10, height=5)
+            _ope_button.grid(row=i+1, column=3)
+            _ope_button.bind("<Button-1>", self.click_button)
 
-    def click_button(self, event: any) -> None:
+        # Generate a button in the second row below
+        for i, k in enumerate(_str_button):
+            _str_button = tk.Button(self.master, text=k, width=10, height=5)
+            _str_button.grid(row=4, column=i)
+            _str_button.bind("<Button-1>", self.click_button)
+
+        # Generate a button in the first row below
+        for i, k in enumerate(_ope_button2):
+            _ope_button2 = tk.Button(self.master, text=k, width=10, height=5)
+            _ope_button2.grid(row=5, column=i)
+            _ope_button2.bind("<Button-1>", self.click_button)
+
+    @staticmethod
+    def click_button(event: any) -> None:
 
         """button click function"""
 
         event.widget.config()
         print(
-            f"button clicked: {(event.widget["text"])}"
+            f"button clicked: {([event.widget["text"]])}"
         )
 
 
-class Calculation(tk.Frame):
-    def __init__(self, master: any) -> None:
+class Calculation:
+    def __init__(self, entry_widget) -> None:
+        self.entry_widget = entry_widget
+        print(entry_widget, "\n", "-"*20)
 
-        tk.Frame.__init__(self, master)
-        self.master = master
+    def __insert_text__(self, text) -> None:
 
-    def input(self):
-        ...
+        """Insert text into the textbox"""
+
+        return self.entry_widget.insert(tk.END, text)
 
 
 def main():

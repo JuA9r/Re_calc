@@ -13,7 +13,7 @@ def test_decorator(func):
 
 @test_decorator
 def __test__(a, b):
-    return a + b
+    return a * b
 
 
 print(f"result: {__test__(random.randint(1, 100), random.randint(1, 100))}")
