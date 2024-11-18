@@ -38,7 +38,6 @@ class Restriction:
             ]:
                 if string[-1] == _str:
                     return True
-
             return False
 
         return wrapper
@@ -97,10 +96,10 @@ class Button(tk.Button):
 
         # operator button list
         _ope_button = ["+", "-", "×", "÷"]
-        _ope_button2 = ["^", "√", "=", "AC"]
+        _ope_button2 = ["^", "√", "C", "AC"]
 
         # str button list
-        _str_button = [".", "0", "00"]
+        _str_button = [".", "0", "="]
 
         # Generate buttons 1 to 9 with 3×3
         for i in range(1, 10):
@@ -143,10 +142,23 @@ class Calculation:
         print(entry_widget, "\n", "-"*20)
 
     def __insert_text__(self, text) -> None:
-
-        """Insert text into the textbox"""
-
         return self.entry_widget.insert(tk.END, text)
+
+    def __clear__(self):
+        return self.entry_widget.delete(0, tk.END)
+
+    def __equal__(self):
+        _replace = str.maketrans(
+            {"＋": "+", "－": "-", "×": "*", "÷": "/", "^": "**", "√": "**0.5"}
+        )
+        self.entry_widget.delete(0, tk.END)
+        self.entry_widget.insert(
+            tk.END, str(eval(self.entry_widget.get().translate(_replace)))
+        )
+
+        self.entry_widget.delete(0, tk.END)
+        self.entry_widget.insert(0, result)
+        print("-"*20, "\n", f"Answer: {_result}")
 
 
 def main():
