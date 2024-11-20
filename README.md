@@ -7,8 +7,8 @@
 ---
 
 ## **Overview**
-This project implements a **simple calculator** using the `tkinter` library in Python. 
-This calculator is capable of basic mathematical operations and allows user input via the keyboard.
+- This project implements a **simple calculator** using the `tkinter` library in Python. 
+- This calculator is capable of basic mathematical operations and allows user input via the keyboard.
 
 ### **Features**
 - Intuitive GUI with buttons for input and operations.
