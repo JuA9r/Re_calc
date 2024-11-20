@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter.font import Font
 
 import math
+import sys
 
 
 class Restriction:
@@ -80,15 +81,21 @@ class Display(tk.Frame):
         )
 
         self._calc = Calculation(self.text)
-        self._button = Button(self.master)
+        self._button = Button(self.master, self._calc)
         self._button.make_button()
 
 
-class Button(tk.Button):
-    def __init__(self, master: any) -> None:
-
-        super().__init__(master)
+class Button:
+    def __init__(self, master, _calc) -> None:
         self.master = master
+        self._calc = _calc
+
+    def handle_button_click(self, event) -> None:
+
+        """Wrapper to handle multiple button clicks"""
+
+        self._calc.__setitem__(event)
+        self.button_click(event)
 
     def make_button(self) -> None:
 
@@ -105,28 +112,28 @@ class Button(tk.Button):
         for i in range(1, 10):
             _num_button = tk.Button(self.master, text=i, width=10, height=5)
             _num_button.grid(row=3-(i-1)//3, column=(i-1)%3, sticky=tk.W)
-            _num_button.bind("<Button-1>", self.click_button)
+            _num_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate buttons in a vertical column on the right edge
         for i, j in enumerate(_ope_button):
             _ope_button = tk.Button(self.master, text=j, width=10, height=5)
             _ope_button.grid(row=i+1, column=3)
-            _ope_button.bind("<Button-1>", self.click_button)
+            _ope_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate a button in the second row below
         for i, k in enumerate(_str_button):
             _str_button = tk.Button(self.master, text=k, width=10, height=5)
             _str_button.grid(row=4, column=i)
-            _str_button.bind("<Button-1>", self.click_button)
+            _str_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate a button in the first row below
         for i, k in enumerate(_ope_button2):
             _ope_button2 = tk.Button(self.master, text=k, width=10, height=5)
             _ope_button2.grid(row=5, column=i)
-            _ope_button2.bind("<Button-1>", self.click_button)
+            _ope_button2.bind("<Button-1>", self.handle_button_click)
 
     @staticmethod
-    def click_button(event: any) -> None:
+    def button_click(event: any) -> None:
 
         """button click function"""
 
@@ -139,32 +146,48 @@ class Button(tk.Button):
 class Calculation:
     def __init__(self, entry_widget) -> None:
         self.entry_widget = entry_widget
-        print(entry_widget, "\n", "-"*20)
+        print(entry_widget, "\n"+"-"*20)
 
-    def __insert_text__(self, text) -> None:
-        return self.entry_widget.insert(tk.END, text)
+    def __get__(self, instance, owner) -> any:
+        return self.entry_widget.get()
 
-    def __clear__(self):
-        return self.entry_widget.delete(0, tk.END)
+    def __set__(self, instance, value) -> None:
+        self.entry_widget.delete(0, tk.END)
+        self.entry_widget.insert(tk.END, value)
 
-    def __equal__(self):
+    def __setitem__(self, event) -> None:
+        value = event.widget["text"]
+        return self.entry_widget.insert(tk.END, value)
+
+    def __delete__(self, instance) -> None:
+        return self.entry_widget.delete(tk.END)
+
+    def __one_delete__(self) -> None:
+        return self.entry_widget.delete(
+            len(self.entry_widget.get())-1, tk.END
+        )
+
+    def __equal__(self) -> bool:
         _replace = str.maketrans(
-            {"＋": "+", "－": "-", "×": "*", "÷": "/", "^": "**", "√": "**0.5"}
-        )
-        self.entry_widget.delete(0, tk.END)
-        self.entry_widget.insert(
-            tk.END, str(eval(self.entry_widget.get().translate(_replace)))
+            {
+                "＋": "+", "－": "-", "×": "*", "÷": "/", "^": "**", "√": "**0.5"
+            }
         )
 
         self.entry_widget.delete(0, tk.END)
-        self.entry_widget.insert(0, result)
-        print("-"*20, "\n", f"Answer: {_result}")
+        result = eval(
+            self.entry_widget.get().translate(_replace)
+        )
+        self.entry_widget.insert(tk.END, str(result))
+        print("-" * 20, "\n", f"Answer: {result}")
 
 
 def main():
     root = tk.Tk()
     App = Display(master=root)
     App.mainloop()
+    if sys.exit:
+        print("-"*20+"\nProcess terminated")
 
 
 if __name__ == "__main__":
