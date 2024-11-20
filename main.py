@@ -7,20 +7,15 @@
 import tkinter as tk
 from tkinter.font import Font
 
-import math
 import sys
 
 
 class Restriction:
 
-    """input text restrictions"""
-
     @staticmethod
     def text_rest_deco(func) -> None:
-        def wrapper(string: any) -> None:
 
-            """Text box input restrictions"""
-
+        def wrapper(string: str) -> None:
             if len(string) == 0:
                 return True
 
@@ -37,14 +32,14 @@ class Restriction:
                 "+", "-", "×", "÷", "=",
                 ".", "(", ")", "^", "√"
             ]:
-                if string[-1] == _str:
+                if string[-1].isdigit() or string[-1] == _str:
                     return True
             return False
 
         return wrapper
 
     @text_rest_deco
-    def __text_rest__(self, string: any) -> bool:
+    def __text_rest__(self, string) -> bool:
         return True
 
 
@@ -59,11 +54,11 @@ class Display(tk.Frame):
 
         self.master = master
 
-        self.master.geometry("320x465+450+100")
+        self.master.geometry("320x460+450+100")
         self.master.title("Calculator")
 
         text_font = tk.font.Font(
-            slant="italic", weight="normal",
+            slant="roman", weight="normal",
             underline=False, size=20
         )
 
@@ -92,20 +87,18 @@ class Button:
 
     def handle_button_click(self, event) -> None:
 
-        """Wrapper to handle multiple button clicks"""
+        """wrapper to handle multiple button clicks"""
 
-        self._calc.__setitem__(event)
         self.button_click(event)
+        action = event.widget["text"]
+        self._calc.__perform_action__(action)
 
     def make_button(self) -> None:
 
         """generate calc button"""
 
-        # operator button list
         operator_button = ["+", "-", "×", "÷"]
         additional_button = ["^", "√", "C", "AC"]
-
-        # str button list
         string_button = [".", "0", "="]
 
         # Generate buttons 1 to 9 with 3×3
@@ -139,53 +132,56 @@ class Button:
 
         event.widget.config()
         print(
-            f"button clicked: {([event.widget["text"]])}"
+            f"button clicked: {(event.widget["text"])}"
         )
 
 
 class Calculation:
     def __init__(self, entry_widget) -> None:
         self.entry_widget = entry_widget
-        print(entry_widget, "\n"+"-"*20)
+        print("Process started", "\n"+"-"*20)
 
-    def __get__(self, instance, owner) -> any:
+    def __get_text(self) -> str:
         return self.entry_widget.get()
 
-    def __set__(self, instance, value) -> None:
-        self.entry_widget.delete(0, tk.END)
-        self.entry_widget.insert(tk.END, value)
+    def __insert_text(self, text: str) -> None:
+        return self.entry_widget.insert(tk.END, text)
 
-    def __setitem__(self, event) -> None:
-        value = event.widget["text"]
-        return self.entry_widget.insert(tk.END, value)
+    def __clear(self) -> None:
+        return self.entry_widget.delete(0, tk.END)
 
-    def __delete__(self, instance) -> None:
-        return self.entry_widget.delete(tk.END)
+    def __one_delete(self) -> None:
+        del_text = self.__get_text()
+        return self.entry_widget.delete(len(del_text)-1, tk.END)
 
-    def __one_delete__(self) -> None:
-        return self.entry_widget.delete(
-            len(self.entry_widget.get())-1, tk.END
-        )
-
-    def __eq__(self, other) -> bool:
+    def __evaluate(self) -> bool:
         _replace = str.maketrans(
             {
-                "＋": "+", "－": "-", "×": "*", "÷": "/", "^": "**", "√": "**0.5"
+                "+": "+", "-": "-", "×": "*", "÷": "/", "^": "**", "√": "**0.5"
             }
         )
 
-        expression = self.entry_widget.get().translate(_replace)
+        expression = self.__get_text().translate(_replace)
         try:
             result = eval(expression)
-            self.entry_widget.delete(0, tk.END)
-            self.entry_widget.insert(tk.END, str(result))
-            print("-" * 20, "\n", f"Answer: {result}")
+            self.__clear()
+            self.__insert_text(str(result))
+            print("-"*20, "\n" + f"Answer: {result}", "\n"+"-"*20)
 
-        except Exception as e:
-            self.entry_widget.delete(0, tk.END)
-            self.entry_widget.insert(tk.END, str(e))
-            print("-" * 20, "\n", f"Error: {e}")
+        except Exception as exception:
+            self.__clear()
+            self.__insert_text(f"(Error)")
+            print("-"*20, "\n" + f"Error: {exception}", "\n"+"-"*20)
 
+    def __perform_action__(self, action: str) -> None:
+        _action = {
+            "=": self.__evaluate,
+            "AC": self.__clear,
+            "C": self.__one_delete,
+        }
+
+        act_func = _action.get(action, lambda: self.__insert_text(action))
+        act_func()
 
 
 def main():
@@ -193,7 +189,7 @@ def main():
     App = Display(master=root)
     App.mainloop()
     if sys.exit:
-        print("-"*20+"\nProcess terminated")
+        print("\n\n"+"Process terminated")
 
 
 if __name__ == "__main__":
