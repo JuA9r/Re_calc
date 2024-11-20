@@ -102,35 +102,35 @@ class Button:
         """generate calc button"""
 
         # operator button list
-        _ope_button = ["+", "-", "×", "÷"]
-        _ope_button2 = ["^", "√", "C", "AC"]
+        operator_button = ["+", "-", "×", "÷"]
+        additional_button = ["^", "√", "C", "AC"]
 
         # str button list
-        _str_button = [".", "0", "="]
+        string_button = [".", "0", "="]
 
         # Generate buttons 1 to 9 with 3×3
         for i in range(1, 10):
-            _num_button = tk.Button(self.master, text=i, width=10, height=5)
-            _num_button.grid(row=3-(i-1)//3, column=(i-1)%3, sticky=tk.W)
-            _num_button.bind("<Button-1>", self.handle_button_click)
+            button = tk.Button(self.master, text=i, width=10, height=5)
+            button.grid(row=3-(i-1)//3, column=(i-1)%3, sticky=tk.W)
+            button.bind("<Button-1>", self.handle_button_click)
 
         # Generate buttons in a vertical column on the right edge
-        for i, j in enumerate(_ope_button):
-            _ope_button = tk.Button(self.master, text=j, width=10, height=5)
-            _ope_button.grid(row=i+1, column=3)
-            _ope_button.bind("<Button-1>", self.handle_button_click)
+        for i, j in enumerate(operator_button):
+            ope_button = tk.Button(self.master, text=j, width=10, height=5)
+            ope_button.grid(row=i+1, column=3)
+            ope_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate a button in the second row below
-        for i, k in enumerate(_str_button):
-            _str_button = tk.Button(self.master, text=k, width=10, height=5)
-            _str_button.grid(row=4, column=i)
-            _str_button.bind("<Button-1>", self.handle_button_click)
+        for i, k in enumerate(string_button):
+            str_button = tk.Button(self.master, text=k, width=10, height=5)
+            str_button.grid(row=4, column=i)
+            str_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate a button in the first row below
-        for i, k in enumerate(_ope_button2):
-            _ope_button2 = tk.Button(self.master, text=k, width=10, height=5)
-            _ope_button2.grid(row=5, column=i)
-            _ope_button2.bind("<Button-1>", self.handle_button_click)
+        for i, k in enumerate(additional_button):
+            add_button = tk.Button(self.master, text=k, width=10, height=5)
+            add_button.grid(row=5, column=i)
+            add_button.bind("<Button-1>", self.handle_button_click)
 
     @staticmethod
     def button_click(event: any) -> None:
@@ -167,19 +167,25 @@ class Calculation:
             len(self.entry_widget.get())-1, tk.END
         )
 
-    def __equal__(self) -> bool:
+    def __eq__(self, other) -> bool:
         _replace = str.maketrans(
             {
                 "＋": "+", "－": "-", "×": "*", "÷": "/", "^": "**", "√": "**0.5"
             }
         )
 
-        self.entry_widget.delete(0, tk.END)
-        result = eval(
-            self.entry_widget.get().translate(_replace)
-        )
-        self.entry_widget.insert(tk.END, str(result))
-        print("-" * 20, "\n", f"Answer: {result}")
+        expression = self.entry_widget.get().translate(_replace)
+        try:
+            result = eval(expression)
+            self.entry_widget.delete(0, tk.END)
+            self.entry_widget.insert(tk.END, str(result))
+            print("-" * 20, "\n", f"Answer: {result}")
+
+        except Exception as e:
+            self.entry_widget.delete(0, tk.END)
+            self.entry_widget.insert(tk.END, str(e))
+            print("-" * 20, "\n", f"Error: {e}")
+
 
 
 def main():
