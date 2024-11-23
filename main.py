@@ -166,12 +166,16 @@ class Calculation:
             result = eval(expression)
             self.__clear()
             self.__insert_text(str(result))
-            print("-"*20, "\n" + f"Answer: {result}", "\n"+"-"*20)
+            print(
+                "-"*20, "\n" + f"Answer: {result}", "\n"+"-"*20
+            )
 
         except Exception as exception:
             self.__clear()
             self.__insert_text(f"(Error)")
-            print("-"*20, "\n" + f"Error: {exception}", "\n"+"-"*20)
+            print(
+                "-"*20, "\n" + f"Error: {exception}", "\n"+"-"*20
+            )
 
     def __perform_action__(self, action: str) -> None:
         _action = {
