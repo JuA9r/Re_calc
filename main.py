@@ -28,12 +28,9 @@ class Restriction:
                 except ValueError:
                     continue
 
-            for _str in [
-                "+", "-", "×", "÷", "=",
-                ".", "(", ")", "^", "√"
-            ]:
-                if string[-1].isdigit() or string[-1] == _str:
-                    return True
+            _str = "+-×÷=.()^√"
+            if string[-1].isdigit() or string[-1] in _str:
+                return True
             return False
 
         return wrapper
@@ -54,7 +51,7 @@ class Display(tk.Frame):
 
         self.master = master
 
-        self.master.geometry("320x460+450+100")
+        self.master.geometry("320x460+450+80")
         self.master.title("Calculator")
 
         text_font = tk.font.Font(
@@ -126,7 +123,7 @@ class Button:
             add_button.bind("<Button-1>", self.handle_button_click)
 
     @staticmethod
-    def button_click(event: any) -> None:
+    def button_click(event: any) -> list[list[str]]:
 
         """button click function"""
 
@@ -139,7 +136,7 @@ class Button:
 class Calculation:
     def __init__(self, entry_widget) -> None:
         self.entry_widget = entry_widget
-        print("Process started", "\n"+"-"*20)
+        print("Process started!", "\n"+"-"*20)
 
     def __get_text(self) -> str:
         return self.entry_widget.get()
@@ -173,9 +170,9 @@ class Calculation:
             self.__insert_text(f"(Error)")
             print("-"*20, "\n" + f"Error: {exception}", "\n"+"-"*20)
 
-    def __perform_action__(self, action: str) -> None:
+    def __perform_action__(self, action: str) -> list[list[str]]:
         _action = {
-            "=": self.__evaluate,
+            "=" : self.__evaluate,
             "AC": self.__clear,
             "C": self.__one_delete,
         }
@@ -189,7 +186,7 @@ def main():
     App = Display(master=root)
     App.mainloop()
     if sys.exit:
-        print("\n\n"+"Process terminated")
+        print("\n\n"+"Process terminated!")
 
 
 if __name__ == "__main__":
