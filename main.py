@@ -1,12 +1,11 @@
 """
+    Calculator.run
 
-    Calculator program
-
+This file contain running Calculator.
 """
 
 import tkinter as tk
 from tkinter.font import Font
-
 import sys
 
 
