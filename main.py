@@ -1,7 +1,7 @@
 """
     Calculator.run
 
-This file contain running Calculator.
+His file is what powers the calculator.
 """
 
 import tkinter as tk
