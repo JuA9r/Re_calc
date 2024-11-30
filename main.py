@@ -28,7 +28,18 @@ class Restriction:
                     continue
 
             _str = "+-×÷=.()^√"
-            if string[-1].isdigit() or string[-1] in _str:
+            if string[-1] in _str:
+                if string[-1] == "(":
+                    if len(string) > 1 and string[-2].isdigit():
+                        return False
+
+                elif string[-1] == ")":
+                    if len(string) > 1 and string[-2] in "+-×÷(^":
+                        return False
+
+                else:
+                    pass
+
                 return True
             return False
 
@@ -41,7 +52,6 @@ class Restriction:
 
 class Display(tk.Frame):
     def __init__(self, master: any) -> None:
-
         """Generate the display"""
         """Generate text box and set content"""
         """Change text style"""
@@ -100,13 +110,13 @@ class Button:
         # Generate buttons 1 to 9 with 3×3
         for i in range(1, 10):
             button = tk.Button(self.master, text=i, width=10, height=5)
-            button.grid(row=3-(i-1)//3, column=(i-1)%3, sticky=tk.W)
+            button.grid(row=3 - (i - 1) // 3, column=(i - 1) % 3, sticky=tk.W)
             button.bind("<Button-1>", self.handle_button_click)
 
         # Generate buttons in a vertical column on the right edge
         for i, j in enumerate(operator_button):
             ope_button = tk.Button(self.master, text=j, width=10, height=5)
-            ope_button.grid(row=i+1, column=3)
+            ope_button.grid(row=i + 1, column=3)
             ope_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate a button in the second row below
@@ -135,7 +145,7 @@ class Button:
 class Calculation:
     def __init__(self, entry_widget) -> None:
         self.entry_widget = entry_widget
-        print("Process started!", "\n"+"-"*20)
+        print("Process started!", "\n" + "-" * 20)
 
     def __get_text(self) -> str:
         return self.entry_widget.get()
@@ -148,7 +158,7 @@ class Calculation:
 
     def __one_delete(self) -> None:
         del_text = self.__get_text()
-        return self.entry_widget.delete(len(del_text)-1, tk.END)
+        return self.entry_widget.delete(len(del_text) - 1, tk.END)
 
     def __evaluate(self) -> bool:
         _replace = str.maketrans(
@@ -163,19 +173,19 @@ class Calculation:
             self.__clear()
             self.__insert_text(str(result))
             print(
-                "-"*20, "\n" + f"Answer: {result}", "\n"+"-"*20
+                "-" * 20, "\n" + f"Answer: {result}", "\n" + "-" * 20
             )
 
         except Exception as exception:
             self.__clear()
             self.__insert_text(f"(Error)")
             print(
-                "-"*20, "\n" + f"Error: {exception}", "\n"+"-"*20
+                "-" * 20, "\n" + f"Error: {exception}", "\n" + "-" * 20
             )
 
     def __perform_action__(self, action: str) -> list[list[str]]:
         _action = {
-            "=" : self.__evaluate,
+            "=": self.__evaluate,
             "AC": self.__clear,
             "C": self.__one_delete,
         }
@@ -189,7 +199,7 @@ def main():
     App = Display(master=root)
     App.mainloop()
     if sys.exit:
-        print("\n\n"+"Process terminated!")
+        print("\n\n" + "Process terminated!")
 
 
 if __name__ == "__main__":
