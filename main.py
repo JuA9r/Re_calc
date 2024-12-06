@@ -1,7 +1,7 @@
 """
     Calculator.run
 
-His file is what powers the calculator.
+This file is what powers the calculator.
 """
 
 import tkinter as tk
@@ -36,9 +36,6 @@ class Restriction:
                 elif string[-1] == ")":
                     if len(string) > 1 and string[-2] in "+-×÷(^":
                         return False
-
-                else:
-                    pass
 
                 return True
             return False
