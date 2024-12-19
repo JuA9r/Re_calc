@@ -49,12 +49,11 @@ class Restriction:
 
 class Display(tk.Frame):
     def __init__(self, master: any) -> None:
-        """Generate the display"""
-        """Generate text box and set content"""
-        """Change text style"""
+        """ Generate the display
+            Generate text box and set content
+            Change text style """
 
         super().__init__(master)
-
         self.master = master
 
         self.master.geometry("320x460+450+80")
@@ -107,13 +106,13 @@ class Button:
         # Generate buttons 1 to 9 with 3×3
         for i in range(1, 10):
             button = tk.Button(self.master, text=i, width=10, height=5)
-            button.grid(row=3 - (i - 1) // 3, column=(i - 1) % 3, sticky=tk.W)
+            button.grid(row=3-(i-1)//3, column=(i-1)%3, sticky=tk.W)
             button.bind("<Button-1>", self.handle_button_click)
 
         # Generate buttons in a vertical column on the right edge
         for i, j in enumerate(operator_button):
             ope_button = tk.Button(self.master, text=j, width=10, height=5)
-            ope_button.grid(row=i + 1, column=3)
+            ope_button.grid(row=i+1, column=3)
             ope_button.bind("<Button-1>", self.handle_button_click)
 
         # Generate a button in the second row below
