@@ -1,5 +1,6 @@
 # **Calculator Application**
 
+
 ## **Execution Environment**
 - **Python**: 3.12  
 - **Tkinter**: 8.6  
@@ -69,5 +70,10 @@
 ## **Future Improvements**
 - Allow parentheses for more complex expressions.
 - Improve error messages to be more descriptive.
+
+
+## **Licence**
+- This project is licensed under the MIT License. See the `LICENSE` file for details.
+
 
 ---
